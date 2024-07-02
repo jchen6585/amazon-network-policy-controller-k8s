@@ -453,7 +453,7 @@ func Test_policyEndpointsManager_computePolicyEndpoints(t *testing.T) {
 				endpointChunkSize: tt.fields.endpointChunkSize,
 			}
 			createList, updateList, deleteList, err := m.computePolicyEndpoints(tt.args.policy, tt.args.adminpolicy, tt.args.policyEndpoints,
-				tt.args.ingressRules, tt.args.egressRules, tt.args.podselectorEndpoints, false, &corev1.Namespace{})
+				tt.args.ingressRules, tt.args.egressRules, tt.args.podselectorEndpoints, false, nil)
 
 			if len(tt.wantErr) > 0 {
 				assert.EqualError(t, err, tt.wantErr)

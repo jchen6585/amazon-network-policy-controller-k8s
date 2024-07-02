@@ -75,6 +75,9 @@ type PodEndpoint struct {
 type PolicyEndpointSpec struct {
 	IsGlobal bool `json:"isGlobal"`
 
+	// Namespaces of the pod selector, will be empty for cluster wide
+	Namespaces []string `json:"namespaces"`
+
 	Priority int `json:"priority"`
 
 	// PodSelector is the podSelector from the policy resource

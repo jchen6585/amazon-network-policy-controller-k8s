@@ -22,7 +22,7 @@ import (
 
 type EndpointsResolver interface {
 	// Resolve returns the resolved endpoints for the given policy ingress, egress rules and pod selector labels.
-	Resolve(ctx context.Context, policy *networking.NetworkPolicy, adminpolicy *adminnetworking.AdminNetworkPolicy, isAdmin bool, namespace *corev1.Namespace) ([]policyinfo.EndpointInfo, []policyinfo.EndpointInfo,
+	Resolve(ctx context.Context, policy *networking.NetworkPolicy, adminpolicy *adminnetworking.AdminNetworkPolicy, isAdmin bool, namespace []corev1.Namespace) ([]policyinfo.EndpointInfo, []policyinfo.EndpointInfo,
 		[]policyinfo.PodEndpoint, error)
 }
 
@@ -41,7 +41,7 @@ type defaultEndpointsResolver struct {
 	logger    logr.Logger
 }
 
-func (r *defaultEndpointsResolver) Resolve(ctx context.Context, policy *networking.NetworkPolicy, adminpolicy *adminnetworking.AdminNetworkPolicy, isAdmin bool, namespace *corev1.Namespace) ([]policyinfo.EndpointInfo,
+func (r *defaultEndpointsResolver) Resolve(ctx context.Context, policy *networking.NetworkPolicy, adminpolicy *adminnetworking.AdminNetworkPolicy, isAdmin bool, namespace []corev1.Namespace) ([]policyinfo.EndpointInfo,
 	[]policyinfo.EndpointInfo, []policyinfo.PodEndpoint, error) {
 	ingressEndpoints, err := r.computeIngressEndpoints(ctx, policy, adminpolicy, isAdmin)
 	if err != nil {
@@ -138,7 +138,7 @@ func (r *defaultEndpointsResolver) computeEgressEndpoints(ctx context.Context, p
 	return egressEndpoints, nil
 }
 
-func (r *defaultEndpointsResolver) computePodSelectorEndpoints(ctx context.Context, policy *networking.NetworkPolicy, adminpolicy *adminnetworking.AdminNetworkPolicy, isAdmin bool, namespace *corev1.Namespace) ([]policyinfo.PodEndpoint, error) {
+func (r *defaultEndpointsResolver) computePodSelectorEndpoints(ctx context.Context, policy *networking.NetworkPolicy, adminpolicy *adminnetworking.AdminNetworkPolicy, isAdmin bool, namespace []corev1.Namespace) ([]policyinfo.PodEndpoint, error) {
 	var podEndpoints []policyinfo.PodEndpoint
 	var namespaces []string
 	var err error
@@ -156,7 +156,9 @@ func (r *defaultEndpointsResolver) computePodSelectorEndpoints(ctx context.Conte
 			}
 		}
 		if namespace != nil {
-			namespaces = append(namespaces, namespace.Name)
+			for _, ns := range namespace {
+				namespaces = append(namespaces, ns.Name)
+			}
 		} else {
 			nsList := &corev1.NamespaceList{}
 			nsSelector, err := metav1.LabelSelectorAsSelector(&metav1.LabelSelector{})

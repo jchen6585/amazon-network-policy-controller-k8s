@@ -624,7 +624,7 @@ func TestEndpointsResolver_Resolve(t *testing.T) {
 				).AnyTimes()
 			}
 
-			ingressEndpoints, egressEndpoints, podEndpoints, err := resolver.Resolve(context.Background(), tt.args.netpol, tt.args.adminnetpol, false, &corev1.Namespace{})
+			ingressEndpoints, egressEndpoints, podEndpoints, err := resolver.Resolve(context.Background(), tt.args.netpol, tt.args.adminnetpol, false, nil)
 
 			if len(tt.wantErr) > 0 {
 				assert.EqualError(t, err, tt.wantErr)

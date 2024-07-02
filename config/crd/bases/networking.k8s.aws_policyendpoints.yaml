@@ -135,6 +135,12 @@ spec:
                 type: array
               isGlobal:
                 type: boolean
+              namespaces:
+                description: Namespaces of the pod selector, will be empty for cluster
+                  wide
+                items:
+                  type: string
+                type: array
               podIsolation:
                 description: |-
                   PodIsolation specifies whether the pod needs to be isolated for a
@@ -239,6 +245,7 @@ spec:
                 type: integer
             required:
             - isGlobal
+            - namespaces
             - policyRef
             - priority
             type: object

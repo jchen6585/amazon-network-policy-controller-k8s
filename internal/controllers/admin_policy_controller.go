@@ -178,5 +178,6 @@ func (r *adminPolicyReconciler) podSelectorNamespaces(ctx context.Context, admin
 		r.logger.Info("Unable to List admin NS", "err", err)
 		return nil, err
 	}
+	r.logger.Info("Namespaces", "namespaces", nsList.Items)
 	return nsList.Items, nil
 }
