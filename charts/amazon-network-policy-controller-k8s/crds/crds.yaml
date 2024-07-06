@@ -239,7 +239,6 @@ spec:
                 type: integer
             required:
             - isGlobal
-            - namespaces
             - policyRef
             - priority
             type: object

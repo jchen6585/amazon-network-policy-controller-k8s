@@ -76,8 +76,13 @@ func (h *enqueueRequestForPolicyEvent) Delete(_ context.Context, e event.DeleteE
 }
 
 func (h *enqueueRequestForPolicyEvent) Generic(_ context.Context, e event.GenericEvent, q workqueue.RateLimitingInterface) {
+	val := e.Object.GetObjectKind()
+	// This is a hacky solution
+	if val.GroupVersionKind().Kind != "NetworkPolicy" {
+		return
+	}
 	policy := e.Object.(*networking.NetworkPolicy)
-	h.logger.V(1).Info("Handling generic event", "policy", k8s.NamespacedName(policy))
+	h.logger.Info("Handling generic event", "policy", k8s.NamespacedName(policy))
 	h.enqueuePolicy(q, policy, h.podUpdateBatchPeriodDuration)
 }
 

@@ -615,8 +615,10 @@ func (m *policyEndpointsManager) packingPodSelectorEndpoints(policy *networking.
 			if chunkStartIdx != chunkEndIdx {
 				doNotDelete.Insert(k8s.NamespacedName(&sliceToCheck[i]))
 			}
-			sliceToCheck[i].Spec.Namespaces = namespaces
-			sliceToCheck[i].Spec.Priority = int(adminpolicy.Spec.Priority)
+			if isAdmin {
+				sliceToCheck[i].Spec.Namespaces = namespaces
+				sliceToCheck[i].Spec.Priority = int(adminpolicy.Spec.Priority)
+			}
 		}
 	}
 

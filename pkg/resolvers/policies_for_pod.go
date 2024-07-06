@@ -169,6 +169,9 @@ func (r *defaultPolicyReferenceResolver) isPodMatchesPolicySelector(pod *corev1.
 
 func (r *defaultPolicyReferenceResolver) isPodReferredOnIngressEgress(ctx context.Context, pod *corev1.Pod, policy *networking.NetworkPolicy, adminPolicy *adminnetworking.AdminNetworkPolicy, isAdmin bool) bool {
 	if isAdmin {
+		if adminPolicy == nil {
+			return false
+		}
 		namepsaces, _ := r.podSelectorNamespaces(ctx, adminPolicy)
 		for _, ns := range namepsaces {
 			for _, ingRule := range adminPolicy.Spec.Ingress {
